@@ -1,0 +1,89 @@
+language: php
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $COMPOSER_CACHE_DIR
+
+php:
+  - 7.1
+  - 7.2
+
+stages:
+  - name: test
+    if: (NOT type IN (pull_request)) AND (branch = master)
+    
+  - name: github release
+    if: (tags = true) AND (branch = master)
+    
+  - name: deploy
+    if: (tags = true) AND (branch = master)
+    
+  - name: Markdown docs deploy
+    if: (NOT type IN (pull_request)) AND (branch = master)
+    
+
+before_install:
+  - composer self-update
+  - if [[ $TEST_COVERAGE != true ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
+
+install:
+  - travis_retry composer install -n --prefer-source
+  - if [[ $TEST_COVERAGE == true ]]; then travis_retry composer test-coverage-install || return 0 ; fi
+
+script: composer test
+
+jobs:
+  allow_failures:
+    - php: 7.2
+  include:
+    - stage: Tests coverage
+      php: 7.1
+      env:
+        - TEST=true
+        - TEST_COVERAGE=true
+      before_script:
+        - mkdir -p build/logs
+      script:
+        - travis_retry composer test-coverage
+      after_success:
+        - travis_retry composer test-coverage-upload
+        - bash <(curl -s https://codecov.io/bash)
+
+    - stage: Markdown docs deploy
+      install: skip
+      script: skip
+      deploy:
+        provider: script
+        script: bash scripts/deploy-docs.sh
+        skip_cleanup: true
+        overwrite: true
+        on:
+          branch: master
+          php: "7.1"
+
+    - stage: GitHub release deploy
+      install: skip
+      script: skip
+      deploy:
+        provider: releases
+        api_key: $GH_TOKEN
+        file: "dist/cecil.phar"
+        skip_cleanup: true
+        overwrite: true
+        on:
+          tags: true
+          php: "7.1"
+
+    - stage: Dist files deploy
+      install: skip
+      script: skip
+      deploy:
+        provider: script
+        script: bash scripts/deploy-dist.sh
+        skip_cleanup: true
+        overwrite: true
+        on:
+          tags: true
+          php: "7.1"
