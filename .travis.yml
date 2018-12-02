@@ -13,9 +13,7 @@ php:
 stages:
   - test
   - code coverage
-  - release deploy
-  - dist deploy
-  - docs deploy
+  - deploy
 
 before_install:
   - composer self-update
@@ -32,15 +30,13 @@ script: echo "RUN TEST SCRIPT"
 jobs:
   allow_failures:
     - php: 7.2
-    - env: FAIL=ALLOW
+    - env: TEST_COVERAGE=true
   include:
     - stage: code coverage
       php: 7.1
       if: (NOT type IN (pull_request)) AND (branch = master)
       env:
-        - TEST=true
         - TEST_COVERAGE=true
-        - FAIL=ALLOW
       before_script:
         - mkdir -p build/logs
       script:
