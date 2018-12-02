@@ -55,7 +55,8 @@ jobs:
       script: skip
       deploy:
         provider: script
-        script: bash scripts/deploy-docs.sh
+        #script: bash scripts/deploy-docs.sh
+        script: echo "BASH SCRIPT DEPLOY"
         skip_cleanup: true
         overwrite: true
         on:
