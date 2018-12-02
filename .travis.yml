@@ -60,6 +60,7 @@ jobs:
           overwrite: true
           on:
             branch: master
+            tags: true
         # dist files
         - provider: script
           #script: bash scripts/deploy-dist.sh
@@ -68,6 +69,7 @@ jobs:
           overwrite: true
           on:
             branch: master
+            tags: true
         # Docs
         - provider: script
           #script: bash scripts/deploy-docs.sh
@@ -76,3 +78,4 @@ jobs:
           overwrite: true
           on:
             branch: master
+            tags: true
