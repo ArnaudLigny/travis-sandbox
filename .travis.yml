@@ -33,7 +33,8 @@ install:
   #- if [[ $TEST_COVERAGE == true ]]; then travis_retry composer test-coverage-install || return 0 ; fi
   - echo "INSTALL COMPOSER"
 
-script: composer test
+#script: composer test
+script: echo "RUN TEST SCRIPT"
 
 jobs:
   allow_failures:
