@@ -13,7 +13,8 @@ php:
 stages:
   - test
   - code coverage
-  - deploy
+  - deploy release
+  - deploy docs
 
 before_install:
   - composer self-update
@@ -70,7 +71,12 @@ jobs:
           on:
             branch: master
             tags: true
-        # Docs
+    - stage: deploy docs
+      php: "7.1"
+      if: (NOT type IN (pull_request)) AND (branch = master)
+      install: skip
+      script: skip
+      deploy:
         - provider: script
           #script: bash scripts/deploy-docs.sh
           script: echo "SCRIPT DEPLOY DOCS"
@@ -78,4 +84,3 @@ jobs:
           overwrite: true
           on:
             branch: master
-            tags: true
