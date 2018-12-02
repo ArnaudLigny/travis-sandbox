@@ -34,7 +34,7 @@ jobs:
   include:
     - stage: code coverage
       php: 7.1
-      if: (NOT type IN (pull_request)) AND (branch = master)
+      if: (NOT type IN (pull_request)) AND (branch = master) # NO PR
       env:
         - TEST_COVERAGE=true
       before_script:
