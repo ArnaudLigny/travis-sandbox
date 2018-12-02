@@ -48,7 +48,7 @@ jobs:
 
     - stage: deploy
       php: "7.1"
-      if: (tag IS present) AND (branch = master)
+      if: tag IS present
       install: skip
       script: skip
       deploy:
