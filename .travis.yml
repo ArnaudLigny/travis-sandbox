@@ -32,8 +32,11 @@ script: echo "RUN TEST SCRIPT"
 jobs:
   allow_failures:
     - php: 7.2
+    - env: FAIL=ALLOW
   include:
     - stage: test code coverage
+      env:
+        - FAIL=ALLOW
       php: 7.1
       if: (NOT type IN (pull_request)) AND (branch = master)
       env:
@@ -42,8 +45,7 @@ jobs:
       before_script:
         - mkdir -p build/logs
       script:
-        #- travis_retry composer test-coverage
-        - echo "RUN TEST COVERAGE"
+        - travis_retry composer test-coverage
       after_success:
         #- travis_retry composer test-coverage-upload
         - echo "UPLOAD TEST COVERAGE"
