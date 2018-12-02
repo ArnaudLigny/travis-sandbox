@@ -41,9 +41,11 @@ jobs:
       before_script:
         - mkdir -p build/logs
       script:
-        - travis_retry composer test-coverage
+        #- travis_retry composer test-coverage
+        - echo "RUN TEST COVERAGE"
       after_success:
-        - travis_retry composer test-coverage-upload
+        #- travis_retry composer test-coverage-upload
+        - echo "UPLOAD TEST COVERAGE"
         - bash <(curl -s https://codecov.io/bash)
 
     - stage: docs deploy
