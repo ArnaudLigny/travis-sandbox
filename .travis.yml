@@ -11,18 +11,10 @@ php:
   - 7.2
 
 stages:
-  - name: test
-    if: (NOT type IN (pull_request)) AND (branch = master)
-    
-  - name: github release
-    if: (tags = true) AND (branch = master)
-    
-  - name: deploy
-    if: (tags = true) AND (branch = master)
-    
-  - name: Markdown docs deploy
-    if: (NOT type IN (pull_request)) AND (branch = master)
-    
+  - test code coverage
+  - release deploy
+  - dist deploy
+  - docs deploy
 
 before_install:
   - composer self-update
@@ -40,8 +32,9 @@ jobs:
   allow_failures:
     - php: 7.2
   include:
-    - stage: Tests coverage
+    - stage: test code coverage
       php: 7.1
+      if: (NOT type IN (pull_request)) AND (branch = master)
       env:
         - TEST=true
         - TEST_COVERAGE=true
@@ -53,7 +46,8 @@ jobs:
         - travis_retry composer test-coverage-upload
         - bash <(curl -s https://codecov.io/bash)
 
-    - stage: Markdown docs deploy
+    - stage: docs deploy
+      if: (tags = true) AND (branch = master)
       install: skip
       script: skip
       deploy:
@@ -65,7 +59,8 @@ jobs:
           branch: master
           php: "7.1"
 
-    - stage: GitHub release deploy
+    - stage: release deploy
+      if: (tags = true) AND (branch = master)
       install: skip
       script: skip
       deploy:
@@ -78,7 +73,8 @@ jobs:
           tags: true
           php: "7.1"
 
-    - stage: Dist files deploy
+    - stage: dist deploy
+      if: (tags = true) AND (branch = master)
       install: skip
       script: skip
       deploy:
