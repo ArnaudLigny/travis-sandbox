@@ -58,15 +58,21 @@ jobs:
           file: "dist/cecil.phar"
           skip_cleanup: true
           overwrite: true
+          on:
+            branch: master
         # dist files
         - provider: script
           #script: bash scripts/deploy-dist.sh
           script: echo "SCRIPT DEPLOY DIST"
           skip_cleanup: true
           overwrite: true
+          on:
+            branch: master
         # Docs
         - provider: script
           #script: bash scripts/deploy-docs.sh
           script: echo "SCRIPT DEPLOY DOCS"
           skip_cleanup: true
           overwrite: true
+          on:
+            branch: master
