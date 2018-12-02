@@ -29,8 +29,9 @@ before_install:
   - if [[ $TEST_COVERAGE != true ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
 
 install:
-  - travis_retry composer install -n --prefer-source
-  - if [[ $TEST_COVERAGE == true ]]; then travis_retry composer test-coverage-install || return 0 ; fi
+  #- travis_retry composer install -n --prefer-source
+  #- if [[ $TEST_COVERAGE == true ]]; then travis_retry composer test-coverage-install || return 0 ; fi
+  - echo "INSTALL COMPOSER"
 
 script: composer test
 
